@@ -4,14 +4,13 @@
         AllowsTransparency="True"
         Background="Transparent"
         ShowInTaskbar="False"
-        ShowActivated="False"
         Topmost="True"
         WindowStyle="None"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        MinWidth="320"
-        MaxWidth="520"
-        MaxHeight="520">
+        MinWidth="620"
+        MaxWidth="760"
+        MaxHeight="680">
     <Border Background="#E61D232A"
             BorderBrush="#55FFFFFF"
             BorderThickness="1"
@@ -20,7 +19,10 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock x:Name="TitleText"
@@ -40,6 +42,248 @@
                            LineHeight="17"
                            TextWrapping="Wrap" />
             </ScrollViewer>
+
+            <StackPanel x:Name="OrdersPanel"
+                        Grid.Row="2"
+                        Margin="0,12,0,0">
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Top 5 sell orders"
+                               Foreground="#DDE7EF"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                    <StackPanel x:Name="RankFilterPanel"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Rank"
+                                   Foreground="#DDE7EF"
+                                   FontSize="12"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,6,0" />
+                        <ComboBox x:Name="OrderRankFilterBox"
+                                  Width="82"
+                                  Height="24"
+                                  SelectionChanged="OrderRankFilterBox_SelectionChanged" />
+                    </StackPanel>
+                </Grid>
+                <ItemsControl x:Name="OrdersItems">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#222A31"
+                                    BorderBrush="#33414A"
+                                    BorderThickness="1"
+                                    CornerRadius="3"
+                                    Padding="8"
+                                    Margin="0,0,0,4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="36" />
+                                        <ColumnDefinition Width="174" />
+                                        <ColumnDefinition Width="106" />
+                                        <ColumnDefinition Width="42" />
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="62" />
+                                        <ColumnDefinition Width="66" />
+                                        <ColumnDefinition Width="88" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0"
+                                            Width="26"
+                                            Height="44"
+                                            Background="#7A2525"
+                                            BorderBrush="#B64A4A"
+                                            BorderThickness="1"
+                                            CornerRadius="2"
+                                            HorizontalAlignment="Left">
+                                        <TextBlock Text="wts"
+                                                   Foreground="White"
+                                                   FontSize="10"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.LayoutTransform>
+                                                <RotateTransform Angle="-90" />
+                                            </TextBlock.LayoutTransform>
+                                        </TextBlock>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1"
+                                                Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+                                        <Ellipse Width="28"
+                                                 Height="28"
+                                                 Fill="#58626B"
+                                                 Stroke="#7C8993"
+                                                 StrokeThickness="1" />
+                                        <TextBlock Text="{Binding UserName}"
+                                                   Margin="8,0,0,0"
+                                                   Foreground="White"
+                                                   FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding StatusText}"
+                                               Foreground="#6EE7A5"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <StackPanel Grid.Column="3"
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Reputation}"
+                                                   Foreground="#DDE7EF"
+                                                   FontSize="12" />
+                                        <Path Width="12"
+                                              Height="12"
+                                              Margin="3,1,0,0"
+                                              Fill="#DDE7EF"
+                                              Stretch="Uniform"
+                                              Data="M8,2 A6,6 0 1,0 8,14 A6,6 0 1,0 8,2 M5,6 L5,7 M11,6 L11,7 M5,10 L11,10" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="4"
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Platinum}"
+                                                   Foreground="#F0C76C"
+                                                   FontSize="14"
+                                                   FontWeight="Bold" />
+                                        <Path Width="13"
+                                              Height="13"
+                                              Margin="4,2,0,0"
+                                              Fill="#F0C76C"
+                                              Stretch="Uniform"
+                                              Data="M8,0 L16,8 L8,16 L0,8 Z M8,3 L13,8 L8,13 L3,8 Z" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="5"
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Quantity}"
+                                                   Foreground="#DDE7EF"
+                                                   FontSize="13" />
+                                        <Path Width="13"
+                                              Height="13"
+                                              Margin="4,2,0,0"
+                                              Fill="#DDE7EF"
+                                              Stretch="Uniform"
+                                              Data="M2,2 L8,0 L14,2 L14,8 L8,10 L2,8 Z M2,8 L8,10 L8,16 L2,14 Z M14,8 L8,10 L8,16 L14,14 Z" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="6"
+                                               Text="{Binding RankText}"
+                                               Foreground="#DDE7EF"
+                                               FontSize="12"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+
+                                    <StackPanel Grid.Column="7"
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center">
+                                        <Button Width="30"
+                                                Height="26"
+                                                Margin="0,0,4,0"
+                                                ToolTip="Message seller">
+                                            <Path Width="14"
+                                                  Height="14"
+                                                  Fill="#20262C"
+                                                  Stretch="Uniform"
+                                                  Data="M2,2 L14,2 L14,10 L6,10 L2,14 Z" />
+                                        </Button>
+                                        <Button Width="48"
+                                                Height="26"
+                                                ToolTip="Copy buy message">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Width="12"
+                                                      Height="12"
+                                                      Margin="0,1,3,0"
+                                                      Fill="#20262C"
+                                                      Stretch="Uniform"
+                                                      Data="M4,0 L12,0 L12,12 L4,12 Z M1,3 L3,3 L3,14 L10,14 L10,16 L1,16 Z" />
+                                                <TextBlock Text="Buy"
+                                                           FontSize="11" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <GroupBox x:Name="ListingForm"
+                      Grid.Row="3"
+                      Header="List sell order"
+                      Margin="0,12,0,0"
+                      Foreground="White">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="76" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#DDE7EF" Text="Price" />
+                    <TextBox x:Name="PriceBox" Grid.Row="0" Grid.Column="1" Height="24" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="#DDE7EF" Text="Quantity" />
+                    <TextBox x:Name="QuantityBox" Grid.Row="0" Grid.Column="3" Height="24" Text="1" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,8,0,0" VerticalAlignment="Center" Foreground="#DDE7EF" Text="Rank" />
+                    <TextBox x:Name="RankBox" Grid.Row="1" Grid.Column="1" Margin="0,8,0,0" Height="24" Text="0" />
+
+                    <CheckBox x:Name="VisibleBox"
+                              Grid.Row="2"
+                              Grid.Column="1"
+                              Grid.ColumnSpan="3"
+                              Margin="0,8,0,0"
+                              Foreground="#DDE7EF"
+                              Content="Visible"
+                              IsChecked="True" />
+                </Grid>
+            </GroupBox>
+
+            <StackPanel x:Name="FormActions"
+                        Grid.Row="4"
+                        Margin="0,12,0,0">
+                <TextBlock x:Name="FormStatusText"
+                           Margin="0,0,0,8"
+                           Foreground="#F7D774"
+                           FontSize="12"
+                           TextWrapping="Wrap" />
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button x:Name="ConfirmButton"
+                            Content="Confirm"
+                            Width="86"
+                            Height="28"
+                            Margin="0,0,8,0"
+                            Click="ConfirmButton_Click" />
+                    <Button Content="Cancel"
+                            Width="76"
+                            Height="28"
+                            Click="CancelButton_Click" />
+                </StackPanel>
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

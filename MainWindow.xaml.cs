@@ -75,7 +75,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            StatusText = ex.Message;
+            StatusText = ExceptionFormatter.GetInnermostMessage(ex);
         }
     }
 
@@ -94,7 +94,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            StatusText = ex.Message;
+            StatusText = ExceptionFormatter.GetInnermostMessage(ex);
         }
     }
 

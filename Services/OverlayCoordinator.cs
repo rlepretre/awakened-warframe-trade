@@ -36,6 +36,8 @@ public sealed class OverlayCoordinator
         _overlayWindow = overlayWindow;
         _debugRegionWindow = debugRegionWindow;
         _captureScale = Math.Max(1, captureScale);
+        _overlayWindow.CreateOrderAsync = CreateOrderAsync;
+        _overlayWindow.RefreshOrdersAsync = RefreshOrdersAsync;
     }
 
     public async Task<OverlayCaptureResult> CaptureAndLookupAsync(CancellationToken cancellationToken = default)
@@ -54,19 +56,45 @@ public sealed class OverlayCoordinator
             return new OverlayCaptureResult(false, "No OCR text detected.");
         }
 
-        ApiResult apiResult = itemMatch is null
-            ? await _apiClient.LookupAsync(lookupText, cancellationToken)
-            : await _apiClient.LookupTopSellOrdersAsync(itemMatch.Slug, cancellationToken);
-        string body = itemMatch is null
-            ? apiResult.Body
-            : $"Matched item: {itemMatch.Name} ({itemMatch.Score:P0})\nSlug: {itemMatch.Slug}\nOCR: {normalizedText}\n\nTop 5 sell orders:\n{apiResult.Body}";
-        _overlayWindow.ShowResult(capture.CursorPosition, lookupText, body);
+        ApiResult apiResult;
+        if (itemMatch is null)
+        {
+            apiResult = await _apiClient.LookupAsync(lookupText, cancellationToken);
+            _overlayWindow.ShowResult(capture.CursorPosition, lookupText, apiResult.Body);
+        }
+        else
+        {
+            MarketTopOrdersResult orders = await _apiClient.GetTopSellOrdersAsync(itemMatch.Slug, itemMatch.MaxRank, null, cancellationToken);
+            apiResult = new ApiResult { IsConfigured = true, IsSuccess = true };
+            string body = $"Matched item: {itemMatch.Name} ({itemMatch.Score:P0})\nSlug: {itemMatch.Slug}\nOCR: {normalizedText}";
+            _overlayWindow.ShowListingForm(
+                capture.CursorPosition,
+                lookupText,
+                body,
+                itemMatch.ItemId,
+                itemMatch.Name,
+                itemMatch.Slug,
+                itemMatch.MaxRank,
+                orders.CheapestSellPrice,
+                orders.SellOrders);
+        }
 
         string status = apiResult.IsConfigured
             ? $"Detected '{lookupText}' and queried API."
             : $"Detected '{lookupText}'. Configure appsettings.json to call an API.";
 
         return new OverlayCaptureResult(true, status);
+    }
+
+    private async Task<string> CreateOrderAsync(ListingOrderRequest request)
+    {
+        ApiResult result = await _apiClient.CreateSellOrderAsync(request);
+        return result.Body;
+    }
+
+    private Task<MarketTopOrdersResult> RefreshOrdersAsync(string itemSlug, int? maxRank, int? rankFilter)
+    {
+        return _apiClient.GetTopSellOrdersAsync(itemSlug, maxRank, rankFilter);
     }
 }
 

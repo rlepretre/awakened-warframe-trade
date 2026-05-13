@@ -38,7 +38,8 @@ public sealed partial class ItemCatalog
         {
             foreach (JsonElement item in data.EnumerateArray())
             {
-                if (!TryGetString(item, "slug", out string? slug)
+                if (!TryGetString(item, "id", out string? id)
+                    || !TryGetString(item, "slug", out string? slug)
                     || !TryGetEnglishName(item, out string? name))
                 {
                     continue;
@@ -50,7 +51,8 @@ public sealed partial class ItemCatalog
                     continue;
                 }
 
-                items.Add(new ItemName(name!, slug!, matchKey, CountWords(matchKey)));
+                int? maxRank = TryGetInt(item, "maxRank", out int parsedMaxRank) ? parsedMaxRank : null;
+                items.Add(new ItemName(name!, id!, slug!, matchKey, CountWords(matchKey), maxRank));
             }
         }
 
@@ -69,7 +71,7 @@ public sealed partial class ItemCatalog
         {
             if (_exactNames.TryGetValue(candidate, out ItemName? exact))
             {
-                return new ItemMatch(exact.Name, exact.Slug, 1.0, candidate);
+                return new ItemMatch(exact.Name, exact.ItemId, exact.Slug, exact.MaxRank, 1.0, candidate);
             }
 
             foreach (ItemName item in _items)
@@ -85,7 +87,7 @@ public sealed partial class ItemCatalog
                     continue;
                 }
 
-                best = new ItemMatch(item.Name, item.Slug, score, candidate);
+                best = new ItemMatch(item.Name, item.ItemId, item.Slug, item.MaxRank, score, candidate);
             }
         }
 
@@ -154,6 +156,13 @@ public sealed partial class ItemCatalog
 
         value = valueElement.GetString();
         return !string.IsNullOrWhiteSpace(value);
+    }
+
+    private static bool TryGetInt(JsonElement item, string propertyName, out int value)
+    {
+        value = 0;
+        return item.TryGetProperty(propertyName, out JsonElement valueElement)
+            && valueElement.TryGetInt32(out value);
     }
 
     private static string ResolvePath(string configuredPath)
@@ -233,7 +242,7 @@ public sealed partial class ItemCatalog
     [GeneratedRegex(@"\s+")]
     private static partial Regex MatchWhitespaceRegex();
 
-    private sealed record ItemName(string Name, string Slug, string MatchKey, int WordCount);
+    private sealed record ItemName(string Name, string ItemId, string Slug, string MatchKey, int WordCount, int? MaxRank);
 }
 
-public sealed record ItemMatch(string Name, string Slug, double Score, string OcrCandidate);
+public sealed record ItemMatch(string Name, string ItemId, string Slug, int? MaxRank, double Score, string OcrCandidate);
