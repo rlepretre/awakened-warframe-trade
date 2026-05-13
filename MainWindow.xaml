@@ -1,0 +1,130 @@
+<Window x:Class="GameOcrOverlay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Test OCR Overlay"
+        Height="430"
+        Width="520"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+                   FontSize="22"
+                   FontWeight="SemiBold" ><Run Language="en-gb" Text="Test"/><Run Text=" OCR Overlay"/></TextBlock>
+
+        <TextBlock Grid.Row="1"
+                   Margin="0,10,0,0"
+                   TextWrapping="Wrap"
+                   Foreground="#555"
+                   Text="{Binding HotkeyText}" />
+
+        <GroupBox Grid.Row="2"
+                  Header="Warframe Market account"
+                  Margin="0,18,0,0">
+            <Grid Margin="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="88" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Token" />
+                <PasswordBox x:Name="AccessTokenBox"
+                             Grid.Row="0"
+                             Grid.Column="1"
+                             Height="26"
+                             PasswordChar="*" />
+
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Margin="0,10,0,0"
+                           VerticalAlignment="Center"
+                           Text="Platform" />
+                <ComboBox x:Name="PlatformBox"
+                          Grid.Row="1"
+                          Grid.Column="1"
+                          Margin="0,10,0,0"
+                          Height="26">
+                    <ComboBoxItem Content="pc" />
+                    <ComboBoxItem Content="ps4" />
+                    <ComboBoxItem Content="xbox" />
+                    <ComboBoxItem Content="switch" />
+                    <ComboBoxItem Content="mobile" />
+                </ComboBox>
+
+                <CheckBox x:Name="CrossplayBox"
+                          Grid.Row="2"
+                          Grid.Column="1"
+                          Margin="0,10,0,0"
+                          Content="Crossplay" />
+
+                <TextBlock Grid.Row="3"
+                           Grid.Column="0"
+                           Margin="0,10,0,0"
+                           VerticalAlignment="Center"
+                           Text="Language" />
+                <ComboBox x:Name="LanguageBox"
+                          Grid.Row="3"
+                          Grid.Column="1"
+                          Margin="0,10,0,0"
+                          Height="26">
+                    <ComboBoxItem Content="en" />
+                    <ComboBoxItem Content="ko" />
+                    <ComboBoxItem Content="ru" />
+                    <ComboBoxItem Content="de" />
+                    <ComboBoxItem Content="fr" />
+                    <ComboBoxItem Content="pt" />
+                    <ComboBoxItem Content="zh-hans" />
+                    <ComboBoxItem Content="zh-hant" />
+                    <ComboBoxItem Content="es" />
+                    <ComboBoxItem Content="it" />
+                    <ComboBoxItem Content="pl" />
+                    <ComboBoxItem Content="uk" />
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+
+        <Border Grid.Row="3"
+                Margin="0,18,0,18"
+                BorderBrush="#DDD"
+                BorderThickness="1"
+                Padding="12">
+            <TextBlock TextWrapping="Wrap"
+                       Text="{Binding StatusText}" />
+        </Border>
+
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="Save"
+                    Width="80"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="SaveAccount_Click" />
+            <Button Content="Test Account"
+                    Width="100"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="TestAccount_Click" />
+            <Button Content="Exit"
+                    Width="80"
+                    Height="32"
+                    Click="Exit_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
